@@ -71,7 +71,7 @@ function vt(t, e) {
 function It(t, e) {
   return R(t.x * e, t.y * e);
 }
-function C(t, e, n) {
+function Y(t, e, n) {
   return t + (e - t) * n;
 }
 function At(t, e, n) {
@@ -80,16 +80,16 @@ function At(t, e, n) {
 function pt(t, e, n) {
   return {
     x: {
-      topLeft: C(t.x.topLeft, e.x.topLeft, n),
-      topRight: C(t.x.topRight, e.x.topRight, n),
-      bottomRight: C(t.x.bottomRight, e.x.bottomRight, n),
-      bottomLeft: C(t.x.bottomLeft, e.x.bottomLeft, n)
+      topLeft: Y(t.x.topLeft, e.x.topLeft, n),
+      topRight: Y(t.x.topRight, e.x.topRight, n),
+      bottomRight: Y(t.x.bottomRight, e.x.bottomRight, n),
+      bottomLeft: Y(t.x.bottomLeft, e.x.bottomLeft, n)
     },
     y: {
-      topLeft: C(t.y.topLeft, e.y.topLeft, n),
-      topRight: C(t.y.topRight, e.y.topRight, n),
-      bottomRight: C(t.y.bottomRight, e.y.bottomRight, n),
-      bottomLeft: C(t.y.bottomLeft, e.y.bottomLeft, n)
+      topLeft: Y(t.y.topLeft, e.y.topLeft, n),
+      topRight: Y(t.y.topRight, e.y.topRight, n),
+      bottomRight: Y(t.y.bottomRight, e.y.bottomRight, n),
+      bottomLeft: Y(t.y.bottomLeft, e.y.bottomLeft, n)
     },
     unit: t.unit
   };
@@ -98,7 +98,7 @@ function Et(t, e, n) {
   return V((n - t) / (e - t), 0, 1);
 }
 function U(t, e, n, o, l) {
-  return C(n, o, Et(t, e, l));
+  return Y(n, o, Et(t, e, l));
 }
 function V(t, e, n) {
   return Math.min(Math.max(t, e), n);
@@ -122,7 +122,7 @@ function mt(t, e, n, o) {
     }
     const v = {};
     f.forEach((g) => {
-      typeof t[g] == "number" && typeof e[g] == "number" ? v[g] = C(
+      typeof t[g] == "number" && typeof e[g] == "number" ? v[g] = Y(
         t[g],
         e[g],
         d.easing(s)
@@ -282,7 +282,7 @@ function J(t) {
 function st(t, e) {
   return t.x >= e.x && t.x <= e.x + e.width && t.y >= e.y && t.y <= e.y + e.height;
 }
-function Yt(t) {
+function Ct(t) {
   let e = t, n = 0, o = 0;
   for (; e; ) {
     const l = (i) => {
@@ -302,7 +302,7 @@ function Yt(t) {
 function Q(t) {
   let e = "unread", n, o, l, i, d, u, a, h, c, s, f;
   function y() {
-    n = t.currentTransform(), o = Lt(t.el()), l = Yt(t.el()), f = ct(t.el()).map(({ parent: I, children: E }) => ({
+    n = t.currentTransform(), o = Lt(t.el()), l = Ct(t.el()), f = ct(t.el()).map(({ parent: I, children: E }) => ({
       parent: {
         el: I,
         initialRect: z(I.getBoundingClientRect())
@@ -365,7 +365,7 @@ function Q(t) {
       h
     ), t.setTransform(I), s = [], f.forEach(({ parent: E, children: p }) => {
       const w = p.map(
-        ({ el: A, initialRect: x, finalRect: X, borderRadius: M }) => Ct(
+        ({ el: A, initialRect: x, finalRect: X, borderRadius: M }) => Yt(
           A,
           x,
           X,
@@ -411,7 +411,7 @@ function Q(t) {
     childrenTransitionData: T
   };
 }
-function Ct(t, e, n, o, l, i) {
+function Yt(t, e, n, o, l, i) {
   t.style.transformOrigin = "0 0";
   const d = l.width / i.width, u = l.height / i.height, a = e.width / n.width, h = e.height / n.height, c = ht(
     o,
@@ -534,6 +534,7 @@ const jt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   toSlottedItems: Rt
 }, Symbol.toStringTag, { value: "Module" })), Bt = {
   animation: "dynamic",
+  animationDuration: void 0,
   enabled: !0,
   swapMode: "hover",
   dragOnHold: !1,
@@ -541,15 +542,19 @@ const jt = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   dragAxis: "both",
   manualSwap: !1
 };
-function wt(t) {
+function wt(t, e) {
+  let n;
   switch (t) {
     case "dynamic":
-      return { easing: bt, duration: 300 };
+      n = { easing: bt, duration: 300 };
+      break;
     case "spring":
-      return { easing: Dt, duration: 350 };
+      n = { easing: Dt, duration: 350 };
+      break;
     case "none":
-      return { easing: (e) => e, duration: 1 };
+      n = { easing: (o) => o, duration: 1 };
   }
+  return e && (n.duration = e), n;
 }
 function kt(t, e) {
   const n = { ...Bt, ...e }, o = Ot({ slots: [], items: [], config: n });
@@ -835,9 +840,9 @@ function Pt(t, e) {
   function X(S) {
     var q;
     F(), K().highlight(), (q = o.drop) == null || q.call(o);
-    const Y = e.slots().map((O) => O.view().boundingRect());
+    const C = e.slots().map((O) => O.view().boundingRect());
     e.slots().forEach((O, W) => {
-      const j = Y[W];
+      const j = C[W];
       O.view().el().style.width = `${j.width}px`, O.view().el().style.maxWidth = `${j.width}px`, O.view().el().style.flexShrink = "0", O.view().el().style.height = `${j.height}px`;
     });
     const b = e.slotItemMap(!0);
@@ -866,7 +871,7 @@ function Pt(t, e) {
     });
   }
   v((S) => {
-    var Y;
+    var C;
     if (e.config().enabled) {
       if (!d) {
         if (N() && !$(S.el) || L() && B(S.el))
@@ -876,7 +881,7 @@ function Pt(t, e) {
       d = !0, l && l.updatePointer({
         x: S.pointerX,
         y: S.pointerY
-      }), a = S, (Y = o.drop) == null || Y.call(o), h(() => {
+      }), a = S, (C = o.drop) == null || C.call(o), h(() => {
         n.el().style.position = "relative";
         const b = S.width + p.x + w.x, q = S.height + p.y + w.y;
         e.config().dragAxis === "y" ? n.setTransform({
@@ -899,8 +904,8 @@ function Pt(t, e) {
       ) : !1
     }), i = null, e.onScroll(null), e.slots().forEach((b) => {
       b.view().el().style.width = "", b.view().el().style.maxWidth = "", b.view().el().style.flexShrink = "", b.view().el().style.height = "";
-    }), e.config().manualSwap && e.config().swapMode === "drop" ? requestAnimationFrame(Y) : Y();
-    function Y() {
+    }), e.config().manualSwap && e.config().swapMode === "drop" ? requestAnimationFrame(C) : C();
+    function C() {
       const b = n.currentTransform(), q = b.dragX + b.translateX, O = b.dragY + b.translateY;
       o.drop = mt(
         { translate: R(q, O) },
@@ -915,7 +920,7 @@ function Pt(t, e) {
             lt.isDragging() || (lt.view().el().style.zIndex = "");
           }), e.resetZIndex(), n.el().style.position = "", u = !0);
         },
-        wt(e.config().animation)
+        wt(e.config().animation, e.config().animationDuration)
       );
     }
   });
@@ -935,8 +940,8 @@ function Pt(t, e) {
     return n.el().querySelector("[data-swapy-handle]");
   }
   function $(S) {
-    const Y = P();
-    return Y ? Y === S || Y.contains(S) : !1;
+    const C = P();
+    return C ? C === S || C.contains(S) : !1;
   }
   function N() {
     return P() !== null;
@@ -945,8 +950,8 @@ function Pt(t, e) {
     return Array.from(n.el().querySelectorAll("[data-swapy-no-drag]"));
   }
   function B(S) {
-    const Y = m();
-    return !Y || Y.length === 0 ? !1 : Y.includes(S) || Y.some((b) => b.contains(S));
+    const C = m();
+    return !C || C.length === 0 ? !1 : C.includes(S) || C.some((b) => b.contains(S));
   }
   function L() {
     return m().length > 0;
@@ -1011,7 +1016,7 @@ function Nt() {
 function tt(t, e) {
   var u, a, h, c;
   (a = (u = t.cancelAnimation()).moveToSlot) == null || a.call(u), (c = (h = t.cancelAnimation()).drop) == null || c.call(h);
-  const n = wt(t.store().config().animation), o = e.transitionValues();
+  const n = wt(t.store().config().animation, t.store().config().animationDuration), o = e.transitionValues();
   let l = t.view().currentTransform(), i = 0, d = !1;
   t.cancelAnimation().moveToSlot = mt(
     {
@@ -1029,12 +1034,12 @@ function tt(t, e) {
         i !== 0 && (d = !0);
         const r = t.dragEvent().relativeX, I = t.dragEvent().relativeY;
         t.continuousDrag() ? t.view().setTransform({
-          translateX: C(
+          translateX: Y(
             l.translateX,
             l.translateX + (o.from.width - o.to.width) * r,
             n.easing(g - i)
           ),
-          translateY: C(
+          translateY: Y(
             l.translateY,
             l.translateY + (o.from.height - o.to.height) * I,
             n.easing(g - i)
@@ -1064,20 +1069,20 @@ function tt(t, e) {
           toBorderRadius: w,
           parentScale: A
         }) => {
-          const x = C(
+          const x = Y(
             A.x,
             1,
             n.easing(g)
-          ), X = C(
+          ), X = Y(
             A.y,
             1,
             n.easing(g)
           );
-          r.style.transform = `translate(${I.x + (0 - I.x / x) * n.easing(g)}px, ${I.y + (0 - I.y / X) * n.easing(g)}px) scale(${C(
+          r.style.transform = `translate(${I.x + (0 - I.x / x) * n.easing(g)}px, ${I.y + (0 - I.y / X) * n.easing(g)}px) scale(${Y(
             E.x / x,
             1 / x,
             n.easing(g)
-          )}, ${C(
+          )}, ${Y(
             E.y / X,
             1 / X,
             n.easing(g)

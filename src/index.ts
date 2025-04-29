@@ -141,6 +141,7 @@ type DragAxis = 'x' | 'y' | 'both'
 
 export type Config = {
   animation: AnimationType
+  animationDuration: number | undefined
   enabled: boolean
   swapMode: 'hover' | 'drop'
   dragOnHold: boolean
@@ -151,6 +152,7 @@ export type Config = {
 
 const DEFAULT_CONFIG: Config = {
   animation: 'dynamic',
+  animationDuration: undefined,
   enabled: true,
   swapMode: 'hover',
   dragOnHold: false,
@@ -159,15 +161,25 @@ const DEFAULT_CONFIG: Config = {
   manualSwap: false
 }
 
-function getAnimateConfig(animationType: AnimationType): AnimateConfig {
+function getAnimateConfig(animationType: AnimationType, animationDuration: number | undefined): AnimateConfig {
+  let animateConfig: AnimateConfig;
+  
   switch (animationType) {
     case 'dynamic':
-      return { easing: easeOutCubic, duration: 300 }
+      animateConfig =  { easing: easeOutCubic, duration: 300 }
+      break
     case 'spring':
-      return { easing: easeOutBack, duration: 350 }
+      animateConfig = { easing: easeOutBack, duration: 350 }
+      break
     case 'none':
-      return { easing: (t: number) => t, duration: 1 }
+      animateConfig = { easing: (t: number) => t, duration: 1 }
   }
+
+  if (animationDuration) {
+    animateConfig.duration = animationDuration
+  }
+
+  return animateConfig
 }
 
 export function createSwapy(
@@ -868,7 +880,7 @@ function createItem(itemEl: HTMLElement, store: Store): Item {
             continuousDrag = true
           }
         },
-        getAnimateConfig(store.config().animation)
+        getAnimateConfig(store.config().animation, store.config().animationDuration)
       )
     }
   })
@@ -1018,7 +1030,7 @@ function createSyncUpdate() {
 function animateFlippedItem(item: Item, flip: Flip) {
   item.cancelAnimation().moveToSlot?.()
   item.cancelAnimation().drop?.()
-  const animateConfig = getAnimateConfig(item.store().config().animation)
+  const animateConfig = getAnimateConfig(item.store().config().animation, item.store().config().animationDuration)
 
   const transitionValues = flip.transitionValues()
 

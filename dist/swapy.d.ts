@@ -11,6 +11,7 @@ export declare type BeforeSwapHandler = (event: BeforeSwapEvent) => boolean;
 
 export declare type Config = {
     animation: AnimationType;
+    animationDuration: number | undefined;
     enabled: boolean;
     swapMode: 'hover' | 'drop';
     dragOnHold: boolean;
